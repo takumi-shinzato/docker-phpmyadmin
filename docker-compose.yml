@@ -1,27 +1,24 @@
 version: '3'
 services:
-  mysql:
-    platform: linux/x86_64
+  db:
+    platform: linux/amd64
     image: mysql:8.0.27
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: mysql
-      MYSQL_DATABASE: db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: sample
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
       TZ: 'Asia/Tokyo'
     volumes:
       - db-data:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin
     depends_on:
-      - mysql
+      - db
     environment:
-      # - PMA_ARBITRARY=1
-      - PMA_HOSTS=mysql
-      # - PMA_USER=root
-      # - PMA_PASSWORD=mysql
+      - PMA_HOSTS=db
     ports:
       - "3001:80"
 volumes:
